@@ -5,7 +5,6 @@ import "docobj.idl";
 library STXGraphicsDemoApplication
 {
 	importlib("stdole2.tlb");
-	importlib("olepro32.dll");
 
 }
 
