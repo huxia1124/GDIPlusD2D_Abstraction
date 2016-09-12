@@ -21,6 +21,7 @@ protected:
 
 protected:
 	CSTXAnchor *_anchor;
+	CString _currentMode;	//GDI+ or Direct2D
 
 protected:
 	LRESULT OnClose(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
@@ -55,6 +56,9 @@ protected:
 		return 0;
 	}
 	LRESULT OnPaint(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+
+private:
+
 public:
 
 

@@ -1144,13 +1144,11 @@ CSTXGraphics* CSTXGraphics::CreateAutoGraphics(HWND hWnd, HDC hDC, int cx, int c
 	}
 	if (bUseDirect2D)
 	{
-		//OutputDebugString(_T("Using Direct2D\n"));
 		pGraphics = new CSTXD2DGraphics();
 	}
 	else
 #endif	
 	{
-		//OutputDebugString(_T("Using GdiPlus\n"));
 		pGraphics = new CSTXGdiPlusGraphics();
 	}
 
