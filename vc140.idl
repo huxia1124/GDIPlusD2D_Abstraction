@@ -1,0 +1,11 @@
+import "docobj.idl";
+
+
+[ version(1.0), uuid(096759d1-99ec-34e9-9054-b9727e011dea) ]
+library STXGraphicsDemoApplication
+{
+	importlib("stdole2.tlb");
+	importlib("olepro32.dll");
+
+}
+
