@@ -23,7 +23,7 @@ public:
 		Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
 		CMainWindow wnd;
-		wnd.Create(NULL, NULL, _T("UniversalClient"));
+		wnd.Create(NULL, NULL, _T("STXGraphics Demo Application"));
 		wnd.ShowWindow(SW_SHOW);
 
 		RunMessageLoop();
