@@ -458,14 +458,14 @@ void CSTXGdiPlusGraphicsSimpleLinearGradientBrush::SetOpacityFloat(float alpha)
 	if (_brush)
 		delete _brush;
 
-	int xpatch = _x2 >= _x1 ? 1 : -1;
-	int ypatch = _y2 >= _y1 ? 1 : -1;
+	//int xpatch = _x2 >= _x1 ? 1 : -1;
+	//int ypatch = _y2 >= _y1 ? 1 : -1;
 
 	int dx = _x2 - _x1;
 	int dy = _y2 - _y1;
 
-	float wdx = sqrt(dx * dx + dy * dy);
-	float wdy = abs(dy);
+	int wdx = static_cast<int>(sqrt(dx * dx + dy * dy));
+	int wdy = abs(dy);
 	if (wdy == 0)
 		wdy = 1;
 
@@ -808,7 +808,7 @@ CSTXD2DGraphicsImage::~CSTXD2DGraphicsImage()
 int CSTXD2DGraphicsImage::GetWidth()
 {
 	if (_image)
-		return _image->GetSize().width;
+		return static_cast<int>(_image->GetSize().width);
 
 	return -1;
 }
@@ -816,7 +816,7 @@ int CSTXD2DGraphicsImage::GetWidth()
 int CSTXD2DGraphicsImage::GetHeight()
 {
 	if (_image)
-		return _image->GetSize().height;
+		return static_cast<int>(_image->GetSize().height);
 
 	return -1;
 }
@@ -1074,14 +1074,14 @@ void CGraphicsRoundRectPath::AddRoundRect(INT x, INT y, INT width, INT height, I
 	INT elWid = 2 * cornerX;
 	INT elHei = 2 * cornerY;
 
-	AddArc(x, y, elWid, elHei, 180, 90); // 左上角圆弧
-	AddLine(x + cornerX, y, x + width - cornerX, y); // 上边
+	AddArc(x, y, elWid, elHei, 180, 90);
+	AddLine(x + cornerX, y, x + width - cornerX, y);
 
-	AddArc(x + width - elWid, y, elWid, elHei, 270, 90); // 右上角圆弧
-	AddLine(x + width, y + cornerY, x + width, y + height - cornerY);// 右边
+	AddArc(x + width - elWid, y, elWid, elHei, 270, 90);
+	AddLine(x + width, y + cornerY, x + width, y + height - cornerY);
 
-	AddArc(x + width - elWid, y + height - elHei, elWid, elHei, 0, 90); // 右下角圆弧
-	AddLine(x + width - cornerX, y + height, x + cornerX, y + height); // 下边
+	AddArc(x + width - elWid, y + height - elHei, elWid, elHei, 0, 90);
+	AddLine(x + width - cornerX, y + height, x + cornerX, y + height);
 
 	AddArc(x, y + height - elHei, elWid, elHei, 90, 90);
 	AddLine(x, y + cornerY, x, y + height - cornerY);
@@ -1909,7 +1909,7 @@ void CSTXGdiPlusGraphics::FillPolygon(CSTXGraphicsPolygon *pPolygon, CSTXGraphic
 	CSTXGdiPlusGraphicsPolygon *pGdiPlusPolygon = dynamic_cast<CSTXGdiPlusGraphicsPolygon*>(pPolygon);
 	if (pGdiPlusBrush && pGdiPlusPolygon && pGdiPlusPolygon->_gdiPlusPoints.size() > 0)
 	{
-		_memGraphics->FillPolygon(pGdiPlusBrush->GetGdiPlusBrush(), &pGdiPlusPolygon->_gdiPlusPoints[0], pGdiPlusPolygon->_gdiPlusPoints.size());
+		_memGraphics->FillPolygon(pGdiPlusBrush->GetGdiPlusBrush(), &pGdiPlusPolygon->_gdiPlusPoints[0], static_cast<INT>(pGdiPlusPolygon->_gdiPlusPoints.size()));
 	}
 }
 
@@ -2327,7 +2327,7 @@ void CSTXD2DGraphics::DrawString(LPCTSTR lpszString, int x, int y, int width, in
 		//	);
 		
 		CComPtr<IDWriteTextLayout> spTextLayout;
-		_dwfactory->CreateTextLayout(lpszString, _tcslen(lpszString), pD2DFont->_font, static_cast<FLOAT>(width), static_cast<FLOAT>(height), &spTextLayout);
+		_dwfactory->CreateTextLayout(lpszString, static_cast<UINT32>(_tcslen(lpszString)), pD2DFont->_font, static_cast<FLOAT>(width), static_cast<FLOAT>(height), &spTextLayout);
 
 		if (spTextLayout && pFormat && pFormat->_endEllipsis)
 		{
@@ -2439,11 +2439,10 @@ CSTXGraphicsPolygon* CSTXD2DGraphics::CreatePolygon(POINT *pt, UINT ptCount, BOO
 	CComPtr<ID2D1GeometrySink> sink;
 	pPolygon->_path->Open(&sink);
 
-	// 使用BEGIN_HOLLOW将不会填充多边形
-	sink->BeginFigure(D2D1::Point2F(pt[0].x, pt[0].y), D2D1_FIGURE_BEGIN_FILLED);
+	sink->BeginFigure(D2D1::Point2F(static_cast<FLOAT>(pt[0].x), static_cast<FLOAT>(pt[0].y)), D2D1_FIGURE_BEGIN_FILLED);
 	for (UINT i = 1; i < ptCount; i++)
 	{
-		sink->AddLine(D2D1::Point2F(pt[i].x, pt[i].y));
+		sink->AddLine(D2D1::Point2F(static_cast<FLOAT>(pt[i].x), static_cast<FLOAT>(pt[i].y)));
 	}
 
 	if (closePolygon)
@@ -2637,7 +2636,7 @@ void CSTXD2DGraphics::DrawRoundedRectangle(int x, int y, int width, int height, 
 	if (pD2DPen)
 	{
 		D2D1_RECT_F rect = D2D1::RectF(static_cast<FLOAT>(x), static_cast<FLOAT>(y), static_cast<FLOAT>(x + width), static_cast<FLOAT>(y + height));
-		D2D1_ROUNDED_RECT rounded_rect = D2D1::RoundedRect(rect, d, d);
+		D2D1_ROUNDED_RECT rounded_rect = D2D1::RoundedRect(rect, static_cast<FLOAT>(d), static_cast<FLOAT>(d));
 		_renderTarget->DrawRoundedRectangle(rounded_rect, pD2DPen->_brush, pD2DPen->_width);
 	}
 }

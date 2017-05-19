@@ -458,7 +458,7 @@ public:
 	CSTXGraphicsPolygon();
 
 public:
-	bool _closePolygon;
+	BOOL _closePolygon;
 	std::vector<POINT> _points;
 
 public:
