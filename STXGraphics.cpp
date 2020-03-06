@@ -2038,6 +2038,8 @@ void CSTXD2DGraphics::Create(HWND hWnd, HDC hDC, int cx, int cy, UINT cacheUniqu
 
 		D2D1_RENDER_TARGET_PROPERTIES propBase = D2D1::RenderTargetProperties();
 		propBase.usage = D2D1_RENDER_TARGET_USAGE_GDI_COMPATIBLE;
+		propBase.dpiX = 96;
+		propBase.dpiY = 96;
 
 		ID2D1HwndRenderTarget *pHwndRenderTarget = NULL;
 		hr = _factory->CreateHwndRenderTarget(
